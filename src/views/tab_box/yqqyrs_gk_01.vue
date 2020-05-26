@@ -66,7 +66,7 @@ export default {
   methods:{
 	  
 	  min(i){//点击明细
-		this.$router.push({path:'/yqqyrs_gk_01_xiang',query:{id:i}});
+		this.$router.push({path:'/yqqyrs_lb_02',query:{id:i}});
 	  },
 	  
 	 git_active(){//获取数据列表
@@ -102,7 +102,7 @@ export default {
 	  
   },
   mounted(){
-	  this.indexof(this.$router.options.routes[1].children,'园区企业人事概况');
+	  this.indexof(this.$router.options.routes[1].children,'企业人事概况');
 	  this.git_active();
   }
 }

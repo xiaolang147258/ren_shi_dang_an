@@ -77,6 +77,13 @@ export default {
 	  			  }
 	  		  }
 	  },
+	  isNull(){//判断文本输入框是否为纯空格或者空
+	  	return function( str ){if ( str == "" ) return true;
+	      var regu = "^[ ]+$";
+	      var re = new RegExp(regu);
+	      return re.test(str);//为空或纯空格为 true  有值为false
+	     }
+	  },
   },
   data(){
 	  return {
@@ -104,11 +111,21 @@ export default {
 	  }
   },
   methods:{
-	  
+	  qin(){
+		this.value={
+		  rp_time:'',//奖惩时间
+		  staff_id:'',//员工ID
+		  company_id:'',//企业ID
+		  company_name:'',//企业名称全称
+		  type:'',//奖惩方式 1奖励 2惩罚
+		  desc:'',//奖惩说明
+		  time:'',//记录更新时间
+		} 
+	  },
 	  git_put(){//新增修改离职原因
 	           if(this.value.rp_time){}else{this.$message({message:'请选择 奖励时间',type:'warning'});return false};
 	           if(this.value.staff_id){}else{this.$message({message:'请选择 奖励对象',type:'warning'});return false};
-	  		   if(this.value.desc){}else{this.$message({message:'请填写 奖励说明',type:'warning'});return false};
+	  		   if(this.isNull(this.value.desc)){this.$message({message:'请填写 奖励说明',type:'warning'});return false}else{};
 	  		   this.value.company_id=localStorage.uid;
 	  		   this.value.company_name = localStorage.company;
 	           let urls =  this.act_yuan?'/pm/reward_punish/modify_reward_punish':'/pm/reward_punish/insert_reward_punish'
@@ -119,15 +136,7 @@ export default {
 	  		   			 this.$message({message:'操作成功',type:'success'})
 	  					 this.dialogVisible2 = false;
 	  					 this.git_active();
-	  					 this.value={
-	  			          rp_time:'',//奖惩时间
-	  			          staff_id:'',//员工ID
-	  			          company_id:'',//企业ID
-	  			          company_name:'',//企业名称全称
-	  			          type:'',//奖惩方式 1奖励 2惩罚
-	  			          desc:'',//奖惩说明
-	  			          time:'',//记录更新时间
-	  		            }
+	  					 this.qin();
 	  		   		  }else{this.active = []}
 	  		   	}
 	  		   })
@@ -206,7 +215,7 @@ export default {
 		               confirmButtonText:'确定',
 		               cancelButtonText:'取消',
 		               type: 'warning'
-		     }).then(() => {this.dialogVisible2 = false;this.git_active();}).catch(() => {});
+		     }).then(() => {this.dialogVisible2 = false;this.git_active();this.qin();}).catch(() => {});
 		  },
   },
   mounted(){

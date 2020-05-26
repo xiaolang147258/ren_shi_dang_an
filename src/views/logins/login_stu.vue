@@ -76,11 +76,9 @@ export default {
 	      if(this.dates.name){}else{this.$message({message:'请输入账号',type:'warning'});return false;}
           if(this.dates.password){}else{this.$message({message:'请输入密码',type:'warning'});return false;}
 		  this.loading = true;
-		  
          $.ajax({
 			    url:this.$store.state.urls+'/zp/user/login',
-			    type: 'post',
-			    // 设置的是请求参数
+			    type: 'post',// 设置的是请求参数
 			    data:this.dates,
 			    dataType: 'json',
 			    success: (res)=> {

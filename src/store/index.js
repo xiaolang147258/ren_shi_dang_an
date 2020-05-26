@@ -34,6 +34,7 @@ export default new Vuex.Store({
 		  address:'',//详细地址
 		  logo:'',//企业头像路径
 		  file_list:[],
+		  gong_list:[],//企业列表
 	 },
 	 
 	  loading:false,
@@ -88,7 +89,23 @@ export default new Vuex.Store({
 	  		  		}
 	  		  	})
 	  },
-	  
+	  git_gong(){
+	  		  	$.ajax({url:'/zp/user/query_all',type:'post',
+				     data:{
+						 role:localStorage.role,
+						 uid:localStorage.uid,
+						 page:1,
+						 size:100000
+					 },
+					 dataType:'json',success:(res)=> {
+	  		  		if(Object.prototype.toString.call(res) != '[object Object]'){res = JSON.parse(res)}
+	  		  		      if(res.code==200){
+	  							  this.state.gong_list = res.data;
+	  							  console.log(this.state.gong_list,'用户列表');
+	  						  }else{console.log(res,'100')}
+	  		  		}
+	  		  	})
+	  },
 	  
   },
   modules: {

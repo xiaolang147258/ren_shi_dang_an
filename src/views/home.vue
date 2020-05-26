@@ -63,15 +63,16 @@ export default {
   mounted(){
 	this.$store.dispatch("git_act");//调用全局方法--获取企业数据 
 	this.$store.dispatch("git_suju");//调用全局方法--获取数据字典
+	this.$store.dispatch("git_gong");//调用全局方法--获取数据字典
 	if(this.roles==1||this.roles==0){//管理员权限
 	   if(this.indef('企业员工管理')){
-		   this.tabbox.splice(this.indef('企业员工管理'),1);
+		   // this.tabbox.splice(this.indef('企业员工管理'),1);
 	   }
 	}else{//企业权限
 	   console.log(1)
 	  
 		this.tabbox.splice(this.indef('用户管理'),1);
-	    this.tabbox.splice(this.indef('园区员工管理'),1); 
+	    // this.tabbox.splice(this.indef('园区员工管理'),1); 
 		this.tabbox.splice(this.indef('园区企业人事列表'),1); 
 		this.tabbox.splice(this.indef('园区企业人事概况'),1); 
 	  

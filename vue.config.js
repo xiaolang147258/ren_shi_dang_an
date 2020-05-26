@@ -5,7 +5,7 @@ module.exports = {
 	  proxy: {
 	    '/': {
 	      target: 'http://192.168.124.9',
-		  // target:'http://223.83.172.216'
+		  // target:'http://wg.jxyh.gov.cn/pm',
 	      ws: true
 	    }
 	
@@ -13,7 +13,6 @@ module.exports = {
 	
 	},
 	lintOnSave: false,
-	
     publicPath:'./',
     outputDir:'dist_pc',
     assetsDir:'static'

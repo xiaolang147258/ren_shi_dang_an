@@ -2,22 +2,22 @@
 	<!-- 园区企业员工管理 -->
   <div class="stu" style="position: relative;">
        <div style="width: 100%;height:56px;border-bottom:1px solid #ECECEC;line-height:56px;">
-       		<el-select class='lef' filterable v-model="value.sex" clearable placeholder="性别" style='width:80px;'>
+       		<el-select class='lef' @change='git_active' filterable v-model="value.sex" clearable placeholder="性别" style='width:80px;'>
        		    <el-option :label="'男'" :value="'1'"></el-option>
 				<el-option :label="'女'" :value="'0'"></el-option>
        		</el-select>
-			<el-input class='lef' type='number' min='0' placeholder="年龄" v-model="value.age_min" clearable style='width:90px;'></el-input>
+			<!-- <el-input class='lef' type='number' min='0' placeholder="年龄" v-model="value.age_min" clearable style='width:90px;'></el-input>
 			<el-input class='lef' type='number' min='0' placeholder="年龄" v-model="value.age_max" clearable style='width:90px;'></el-input>
 			<el-date-picker v-model="value.entry_time_start" placeholder="入职时间" style='width:140px;' class='lef' value-format='yyyy-MM-dd' type="date" clearable></el-date-picker>
-			
-			<el-select v-model="value.edu_id" class='lef' filterable clearable placeholder="学历" style='width:80px;'>
+			 -->
+			<el-select v-model="value.edu_id" @change='git_active' class='lef' filterable clearable placeholder="学历" style='width:80px;'>
 			    <el-option v-for='i in doc("EDU_S_T")' :label="i.label" :value="i.value"></el-option>
 			</el-select>
-			<el-select v-model="value.politic_id" class='lef' filterable clearable placeholder="是否党员" style='width:110px;'>
+			<el-select v-model="value.politic_id" @change='git_active' class='lef' filterable clearable placeholder="是否党员" style='width:110px;'>
 			    <el-option :label="'是'" :value="'13'"></el-option>
 				<el-option :label="'否'" :value="'0'"></el-option>
 			</el-select>
-			<el-select v-model="value.is_poor" class='lef' filterable clearable placeholder="是否贫困户" style='width:120px;'>
+			<el-select v-model="value.is_poor" @change='git_active' class='lef' filterable clearable placeholder="是否贫困户" style='width:120px;'>
 			    <el-option :label="'是'" :value="'1'"></el-option>
 				<el-option :label="'否'" :value="'0'"></el-option>
 			</el-select>
@@ -26,18 +26,18 @@
 			<el-button @click='addyuan(false)' style="margin-top:7px;float:right;" type="primary">新增员工</el-button>
        </div>
 	   
-	   <el-table v-loading='loading' :data="tableData" width='100%' height='561' stripe style="width: 100%" :height='670'>
+	   <el-table v-loading='loading' :data="tableData" width='100%' height='561' style="width: 100%" :height='670' :row-class-name="tableRowClassName">
 	     <el-table-column fixed header-align='center' align='center' prop="name" label="姓名" ></el-table-column>
 	     <el-table-column header-align='center' align='center' prop="name" label="性别" >
 			 <template slot-scope="scope">{{scope.row.sex==1?'男':'女'}}</template>
 		 </el-table-column>
-		 <el-table-column header-align='center' align='center' prop="birth_day" label="出生年月" width='120'></el-table-column>
+		 <!-- <el-table-column header-align='center' align='center' prop="birth_day" label="出生年月" width='120'></el-table-column> -->
 		 <el-table-column header-align='center' align='center' prop="age" label="年龄" ></el-table-column>
 		 <el-table-column header-align='center' align='center' prop="edu_id" label="岗位状态" >
 		 			 <template slot-scope="scope">{{scope.row.position_status==1?'在职':'离职'}}</template>
 		 </el-table-column>
 		 <el-table-column header-align='center' align='center' prop="phone" label="联系电话" width='120'></el-table-column>
-		 <el-table-column header-align='center' align='center' prop="home_address" label="家庭地址" width='150' show-overflow-tooltip ></el-table-column>
+		 <!-- <el-table-column header-align='center' align='center' prop="home_address" label="家庭地址" width='150' show-overflow-tooltip ></el-table-column> -->
 		 <el-table-column header-align='center' align='center' prop="edu_id" label="学历" >
 			 <template slot-scope="scope">{{docsa(scope.row.school[0].edu_id)}}</template>
 		 </el-table-column>
@@ -45,13 +45,13 @@
 			 <template slot-scope="scope">{{docsa(scope.row.politic_id)}}</template>
 		 </el-table-column>
 		 <el-table-column header-align='center' align='center' prop="work_type" label="工种" ></el-table-column>
-		 <el-table-column header-align='center' align='center' prop="is_poor" label="是否贫困人口" >
+		 <el-table-column header-align='center' align='center' prop="is_poor" label="贫困人口" >
 			 <template slot-scope="scope">{{scope.row.is_poor==1?'是':'否'}}</template>
 		 </el-table-column>
 		 <el-table-column header-align='center' align='center' prop="name" label="脱贫属性" >
 			 <template slot-scope="scope">{{docsa(scope.row.poor_id)}}</template>
 		 </el-table-column>
-		 <el-table-column header-align='center' align='center' prop="name" label="是否服过兵役" >
+		 <el-table-column header-align='center' align='center' prop="name" label="服过兵役" >
 			 <template slot-scope="scope">{{scope.row.is_military==1?'是':'否'}}</template>
 		 </el-table-column>
 	     <el-table-column fixed='right' header-align='center' align='center' label="操作" width='160'>
@@ -79,7 +79,14 @@
 		 <addyqqlyg ref='adds'></addyqqlyg>
   </div>
 </template>
-
+<style>
+  .el-table .warning-row {
+    background:oldlace;
+  }
+   .el-table .success-row {
+      background: #f0f9eb;
+    }
+</style>
 <script>
 // import HelloWorld from '@/components/HelloWorld.vue'
 import jianact from '@/components/jian_act.vue'
@@ -91,10 +98,11 @@ export default {
   computed:{
 	  indexof(){
 	  		  return function(data,label){
+				  console.log(data,label);
 	  			  for(let h=0;h<data.length;h++){
 	  			  		if(label == data[h].label){
 	  			  			this.$store.state.tab_cox = h;
-	  			  			break
+							console.log(123,this.$store.state.tab_cox)
 	  			  		}
 	  			  }
 	  		  }
@@ -136,6 +144,7 @@ export default {
 						company_id:'',//性别企业ID
 						page:'',//性别分页参数
 						size:'',//性别分页参数
+						position_status:1
 		},
 		recru:'',//搜索条件
 		totals:0,
@@ -149,6 +158,14 @@ export default {
 	  }
   },
   methods:{
+	  tableRowClassName({row, rowIndex}){
+		  if(row.is_true==1){
+			  return ''
+		  }else{
+			  return 'warning-row'
+		  }
+	  },
+	  
 	  liz(i){//离职处理
 		this.$refs.adds.git_fuchad2(i);  
 	  },
@@ -187,9 +204,10 @@ export default {
 			this.git_active();
 	 },
 	 gityuan(){//导出员工
+	    if(this.tableData.length==0){this.$message({message:'无数据可导出',type:'warning'});return false}
 	    let value = this.value;
 		let static1 = `?sex=`+value.sex+`&age_min=`+value.age_min+`&age_max=`+value.age_max+`&entry_time_start=`+value.entry_time_start+`&entry_time_end=`+value.entry_time_end;
-		let static2 = `&edu_id=`+value.edu_id+`&politic_id=`+value.politic_id+`&is_poor=`+value.is_poor+`&keyword=`+value.keyword+`&company_id=`+value.company_id;
+		let static2 = `&edu_id=`+value.edu_id+`&politic_id=`+value.politic_id+`&is_poor=`+value.is_poor+`&keyword=`+value.keyword+`&company_id=`+value.company_id+`&position_status=1`;
 		let asd = this.role==0||this.role==1?'/pm/index/export_park_data':'/pm/index/export_staff_data';
 		let urls =asd+static1+static2;
 		window.open(urls);
@@ -213,7 +231,7 @@ export default {
 	 			        data: formData,
 	 			        contentType: false,
 	 			        processData: false,
-	 			       dataType: 'json',
+	 			        dataType: 'json',
 	 			       success: (res)=> {
 						 if(res.code==200){
 							   alert('上传成功');
@@ -225,9 +243,9 @@ export default {
   },
   mounted(){
 	  this.git_active();//获取数据
-	  let a = this.role==0||this.role==1?'园区员工管理':'企业员工管理';
-	  this.indexof(this.$router.options.routes[1].children,a);
-	  
+	  this.indexof(this.$router.options.routes[1].children,'员工管理');
+	  // this.$store.state.tab_cox = 1
+	  // if(localStorage.role==2){this.$store.state.tab_cox = 0;}
 	  
   }
 }

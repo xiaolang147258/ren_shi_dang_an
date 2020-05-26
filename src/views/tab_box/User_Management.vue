@@ -78,6 +78,19 @@ export default {
 			  }
 		  }
 	  },
+	  isNull(){//判断文本输入框是否为纯空格或者空
+	  	  return function( str ){
+	      if ( str == "" ) return true;
+	      var regu = "^[ ]+$";
+	      var re = new RegExp(regu);//为空或纯空格为 true    有值为false
+	      return re.test(str);
+	     }
+	  },
+	  detbn(){//清除空格
+		  return function(e){
+			 return e.replace(/\s/g,"");
+		  }
+	  }
   },
   data(){
 	  return {
@@ -110,7 +123,7 @@ export default {
 		this.$confirm('确定重置 '+i.company+' 的密码?', '提示', {confirmButtonText: '确定',cancelButtonText: '取消',type: 'warning'
 		  }).then(()=>{
 			this.loading = true;
-		    $.ajax({url:'zp/user/reset_password',type:'post',data:{uid:i.uid},dataType:'json',success:(res)=> {
+		    $.ajax({url:'/zp/user/reset_password',type:'post',data:{uid:i.uid},dataType:'json',success:(res)=> {
 		    	if(Object.prototype.toString.call(res) != '[object Object]'){res = JSON.parse(res)}
 		    	      if(res.code==200){
 		    			  this.$message({message: '重置成功',type: 'success'});
@@ -169,11 +182,12 @@ export default {
 	},
 	//添加/修改
 		cre_ate(){
-			   if(this.art_put.names){}else{this.$message({message:'请输入企业名称或者管理员姓名',type:'warning'});return false;}
+			   if(this.isNull(this.art_put.names)){this.$message({message:'请输入企业名称或者管理员姓名',type:'warning'});return false;}else{}
 			    if(this.role==0){
 					if(this.art_put.radio){}else{this.$message({message:'请选择身份',type:'warning'});return false;}
 				}
-			   if(this.art_put.card){}else{this.$message({message:'请输入账号',type:'warning'});return false;}
+			   if(this.isNull(this.art_put.card)){this.$message({message:'请输入账号',type:'warning'});return false;}else{}
+			   
 			   // if(this.art_put.passwords){}else{this.$message({message:'请输入密码',type:'warning'});return false;}
 			   // if(this.art_put.passwords2){}else{this.$message({message:'请输入确认密码',type:'warning'});return false;}
 			   // if(this.art_put.passwords==this.art_put.passwords2){}else{this.$message({message:'两次输入的密码不相同',type:'warning'});return false;}
@@ -182,8 +196,8 @@ export default {
 				this.loading = true;
 		        $.ajax({url:this.$store.state.urls+urll,type:'post',
 				        data:{
-							company:this.art_put.names,
-							name:this.art_put.card,
+							company:this.detbn(this.art_put.names),
+							name:this.detbn(this.art_put.card),
 							password:this.art_put.passwords,
 							// role:this.art_put.radio,
 							admin_role:this.role,

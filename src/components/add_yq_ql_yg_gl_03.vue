@@ -6,7 +6,7 @@
 	     <p class="pbox" style="text-align: center;width:100%;font-size:23px;height:40px;">{{active?'修改员工信息':'新增员工信息'}} </p>
          
 		 <div class="tabboxa">
-			 <p><a>*</a>姓名</p><el-input v-model="value.name" class='tabboxright' placeholder="请输入"  clearable></el-input>
+			 <p><a>*</a>姓名</p><el-input v-model="value.name" class='tabboxright' placeholder="请输入" clearable ></el-input>
 		 </div>
 		 <div class="tabboxa">
 		    <p><a>*</a>性别</p>
@@ -16,16 +16,16 @@
 			</el-select>
 		 </div>
 		 <div class="tabboxa">
-		 	<p><a>*</a>身份证号码</p><el-input v-model="value.card" class='tabboxright' placeholder="请输入"  clearable></el-input>
+		 	<p><a>*</a>身份证号码</p><el-input v-model="value.card" class='tabboxright' placeholder="请输入" clearable></el-input>
 		 </div>
 		 <div class="tabboxa">
-		 	<p><a>*</a>家庭住址</p><el-input v-model="value.home_address" class='tabboxright' placeholder="请输入"  clearable></el-input>
+		 	<p><a>*</a>家庭住址</p><el-input v-model="value.home_address" class='tabboxright' placeholder="请输入"></el-input>
 		 </div>
 		 <div class="tabboxa">
-		 	<p><a>*</a>籍贯</p><el-input v-model="value.home_town" class='tabboxright' placeholder="请输入"  clearable></el-input>
+		 	<p><a>*</a>籍贯</p><el-input v-model="value.home_town" class='tabboxright' placeholder="请输入" clearable></el-input>
 		 </div>
 		 <div class="tabboxa">
-		 	<p><a>*</a>手机号码</p><el-input v-model="value.phone" class='tabboxright' placeholder="请输入"  clearable></el-input>
+		 	<p><a>*</a>手机号码</p><el-input type='number' v-model="value.phone" class='tabboxright' placeholder="请输入"  clearable></el-input>
 		 </div>
 		 <div class="tabboxa">
 		    <p><a>*</a>政治面貌</p>
@@ -40,7 +40,7 @@
 		 	<p>职称</p><el-input v-model="value.job_title" class='tabboxright' placeholder="请输入"  clearable></el-input>
 		 </div>
 		 <div class="tabboxa">
-		 	<p><a>*</a>工种</p><el-input v-model="value.work_type" class='tabboxright' placeholder="请输入"  clearable></el-input>
+		 	<p><a>*</a>工种</p><el-input v-model="value.work_type" class='tabboxright' placeholder="请输入"  clearable ></el-input>
 		 </div>
 		 <div class="tabboxa">
 		 	<p><a>*</a>岗位状态</p>
@@ -84,7 +84,6 @@
 		 			<el-option v-for='i in doc("EDU_S_T")' :label="i.label" :value="i.value"></el-option>
 		 		</el-select>
 		 </div>
-		 
 	     <span style="width:200px;margin: 0 auto;">
 	       <el-button @click="handleClose">取 消</el-button>
 	       <el-button type="primary" @click="gitdelectact">确 定</el-button>
@@ -113,6 +112,7 @@
 
 <script>
 import $ from 'jquery'
+
 export default {
   name: 'stu',
   components: {},//声明子组件
@@ -136,6 +136,30 @@ export default {
 	  				}
 	  			}
 	  		}  
+	  },
+	  isNull(){//判断文本输入框是否为纯空格或者空
+		return function( str ){
+	      if ( str == "" ) return true;
+	      var regu = "^[ ]+$";
+	      var re = new RegExp(regu);//为空或纯空格为 true    有值为false
+	      return re.test(str);
+	     }
+	  },
+	  isChn(){//判断是否为纯中文
+	    return function (str){
+	        var reg=/^[\u4E00-\u9FA5]+$/;return reg.test(str)
+	    }
+	  },
+	  isphone(){//手机号格式
+	    return function (str){
+	        var reg=/^1[3456789]\d{9}$/;return reg.test(str)
+	    }
+	  },
+	  iscard(){//身份证号格式
+	    return function (str){
+	        var reg=/^[1-9][0-9]{5}(19|20)[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|31)|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}([0-9]|x|X)$/
+			return reg.test(str)
+	    }
 	  },
   },
   data(){
@@ -180,11 +204,9 @@ export default {
 					  entry_time:"",//进入企业时间
 		}
 		
-		
 	  }
   },
   methods:{
-	  
 //新增或修改员工
 	  git_fuchad(i){//获取父组件数据  打开弹窗
 	      console.log(i);//
@@ -208,15 +230,21 @@ export default {
 	      this.dialogVisible=true;
 	  },
 	  gitdelectact(){//新增 修改用户数据
-		       if(this.value.name){}else{this.$message({message:'请填写 姓名',type:'warning'});return false};
+		       if(this.isNull(this.value.name)){this.$message({message:'请填写 姓名',type:'warning'});return false}else{};
+			   if(this.isChn(this.value.name)){}else{this.$message({message:'姓名 必须为纯中文格式',type:'warning'});return false};
 		       if(this.value.sex){}else{this.$message({message:'请选择 性别',type:'warning'});return false};
-			   if(this.value.card){}else{this.$message({message:'请填写 身份证号码',type:'warning'});return false};
-			   if(this.value.home_address){}else{this.$message({message:'请填写 家庭地址',type:'warning'});return false};
-			   if(this.value.home_town){}else{this.$message({message:'请填写 籍贯',type:'warning'});return false};
-			   if(this.value.phone){}else{this.$message({message:'请填写 手机号码',type:'warning'});return false};
+			   if(this.isNull(this.value.card)){this.$message({message:'请填写 身份证号',type:'warning'});return false}else{};
+			   if(this.iscard(this.value.card)){}else{this.$message({message:'身份证号 格式不正确',type:'warning'});return false};
+			   if(this.isNull(this.value.home_address)){this.$message({message:'请填写 家庭地址',type:'warning'});return false}else{};
+			   if(this.isChn(this.value.home_address)){}else{this.$message({message:'家庭地址 必须为纯中文格式',type:'warning'});return false};
+			   if(this.isNull(this.value.home_town)){this.$message({message:'请填写 籍贯',type:'warning'});return false}else{};
+			   if(this.isChn(this.value.home_town)){}else{this.$message({message:'籍贯 必须为纯中文格式',type:'warning'});return false};
+			   if(this.isNull(this.value.phone)){this.$message({message:'请填写 手机号码',type:'warning'});return false}else{};
+			   if(this.isphone(this.value.phone)){}else{this.$message({message:'手机号 格式不正确',type:'warning'});return false};
 			   if(this.value.politic_id){}else{this.$message({message:'请选择 政治面貌',type:'warning'});return false};
 			   if(this.value.entry_time){}else{this.$message({message:'请选择 入职时间',type:'warning'});return false};
-			   if(this.value.work_type){}else{this.$message({message:'请填写 工种',type:'warning'});return false};
+			   if(this.isNull(this.value.work_type)){this.$message({message:'请填写 工种',type:'warning'});return false}else{};
+			   if(this.isChn(this.value.work_type)){}else{this.$message({message:'工种 必须为纯中文格式',type:'warning'});return false};
 			   if(this.value.position_status){}else{this.$message({message:'请选择 岗位状态',type:'warning'});return false};
 			   if(this.value.is_poor){}else{this.$message({message:'请选择 是否贫人口',type:'warning'});return false};
 			   if(this.value.is_military){}else{this.$message({message:'请选择 是否服过兵役',type:'warning'});return false};
@@ -224,7 +252,6 @@ export default {
 				this.value.company_id = localStorage.uid;
 				this.value.company_name = localStorage.company;
 				this.value.edu_id = this.value.edu_list.edu_id;
-		        
 				let urls = this.active?'/pm/staff_info/modify_staff':'/pm/staff_info/insert_staff';
 				$.ajax({url:urls,type:'post',data:this.value,dataType:'json',success:(res)=> {
 					if(Object.prototype.toString.call(res) != '[object Object]'){res = JSON.parse(res)}
@@ -234,11 +261,9 @@ export default {
 							this.$parent.git_active();
 							this.$message({message:'操作成功',type:'success'})
 							this.qin();
-							
 						  }else{
 							this.$message({message:res.msg,type:'warning'})
 						  }
-						  
 					}
 				})
 	  },
@@ -323,6 +348,7 @@ export default {
 	  },
   },
   mounted(){
+	
 	  
   }
 }

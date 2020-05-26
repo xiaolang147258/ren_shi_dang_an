@@ -1,40 +1,17 @@
 <template>
-	<!-- 园区企业人事列表 -->
+	<!-- 首页 -->
   <div class="stu" style="position: relative;">
-       <div style="width: 100%;height:56px;border-bottom:1px solid #ECECEC;line-height:56px;">
-		   
-		   <el-select v-model="value.company_id" @change='git_active' class='lef' filterable clearable placeholder="选择企业" style='width:200px;'>
-		       <el-option v-for='i in $store.state.gong_list' :label="i.company" :value="i.uid"></el-option>
-		   </el-select>
-		   
-       		<el-select class='lef' @change='git_active' filterable v-model="value.sex" clearable placeholder="性别" style='width:80px;'>
-       		    <el-option :label="'男'" :value="'1'"></el-option>
-       			<el-option :label="'女'" :value="'0'"></el-option>
-       		</el-select>
-       		<!-- <el-input class='lef' type='number' min='0' placeholder="年龄" v-model="value.age_min" clearable style='width:90px;'></el-input>
-       		<el-input class='lef' type='number' min='0' placeholder="年龄" v-model="value.age_max" clearable style='width:90px;'></el-input>
-       		<el-date-picker v-model="value.entry_time_start" placeholder="入职时间" style='width:140px;' class='lef' value-format='yyyy-MM-dd' type="date" clearable></el-date-picker>
-       		 -->
-       		<el-select v-model="value.edu_id" @change='git_active' class='lef' filterable clearable placeholder="学历" style='width:80px;'>
-       		    <el-option v-for='i in doc("EDU_S_T")' :label="i.label" :value="i.value"></el-option>
-       		</el-select>
-       		<el-select v-model="value.politic_id" @change='git_active' class='lef' filterable clearable placeholder="是否党员" style='width:110px;'>
-       		    <el-option :label="'是'" :value="'13'"></el-option>
-       			<el-option :label="'否'" :value="'0'"></el-option>
-       		</el-select>
-       		<el-select v-model="value.is_poor" @change='git_active' class='lef' filterable clearable placeholder="是否贫困户" style='width:120px;'>
-       		    <el-option :label="'是'" :value="'1'"></el-option>
-       			<el-option :label="'否'" :value="'0'"></el-option>
-       		</el-select>
-			<el-select v-model="value.position_status" @change='git_active' class='lef' filterable clearable placeholder="岗位状态" style='width:120px;'>
-			    <el-option :label="'在职'" :value="'1'"></el-option>
-				<el-option :label="'离职'" :value="'0'"></el-option>
-			</el-select>
-       		<el-input class='lef' placeholder="姓名查询" v-model="value.keyword" clearable style='width:140px;'></el-input>
-       		<el-button @click='git_active' class="lef" style="margin-top:7px;" type="success">查询</el-button>
+       <div style="width: 100%;height:70px;line-height:70px;" :style="{marginTop:!inpshow?tops:'0px'}">
+		   <div :class="{inps:inpshow,inp:!inpshow}">
+			   <div :class="{inp_chs:inpshow,inp_ch:!inpshow}">
+				   <img src="../../assets/sou.png" alt="">
+				   <input v-model="value.keyword" type="text"  @keyup.enter='sous' placeholder="关键字 : 姓名/家庭住址" >
+			   </div>
+			   <button @click="sous">搜索</button>
+		   </div>
        </div>
-	   
-	   <el-table v-loading='loading' :data="tableData" width='100%' height='561' style="width: 100%" :height='670' :row-class-name="tableRowClassName">
+	<div v-show="inpshow">
+	   <el-table v-loading='loading' :data="tableData" width='100%' height='561' stripe style="width: 100%;margin-top:20px;" :height='630'>
 	     <el-table-column fixed header-align='center' align='center' prop="name" label="姓名" ></el-table-column>
 	     <el-table-column header-align='center' align='center' prop="name" label="性别" >
 			 <template slot-scope="scope">{{scope.row.sex==1?'男':'女'}}</template>
@@ -76,17 +53,11 @@
          layout="total, sizes, prev, pager, next, jumper"
          :total="totals">
          </el-pagination>
+	</div> 	 
 		 <jianact ref="child"></jianact>
   </div>
 </template>
-<style>
-  .el-table .warning-row {
-    background:oldlace;
-  }
-   .el-table .success-row {
-      background: #f0f9eb;
-    }
-</style>
+
 <script>
 // import HelloWorld from '@/components/HelloWorld.vue'
 import jianact from '@/components/jian_act.vue' 
@@ -128,6 +99,8 @@ export default {
   },
   data(){
 	  return {
+	    inpshow:false,
+		tops:'300px',
 		value:{
 			sex:'',//性别
 			age_min:'',//性别年龄区间之最小年龄
@@ -137,7 +110,7 @@ export default {
 			edu_id:'',//性别学历ID
 			politic_id:'',//性别政治面貌ID (是否党员，党员ID为13，非党员传空)
 			is_poor:'',//性别是否贫困户 1是 0否
-			keyword:'',//性别关键字
+			keyword:'',//关键字
 			position_status:'',//岗位状态 1在职 0离职
 			company_id:'',//性别企业ID
 			page:1,//性别分页参数
@@ -155,12 +128,12 @@ export default {
 	  }
   },
   methods:{
-	  tableRowClassName({row, rowIndex}){
-	  		  if(row.is_true==1){
-	  			  return ''
-	  		  }else{
-	  			  return 'warning-row'
-	  		  }
+	  sous(){
+		if(this.value.keyword){
+			this.pages=1;
+		    this.git_active();
+			this.inpshow = true;
+		}
 	  },
 	  min(i){//点击详情
 		 this.$refs.child.git_act(i);  
@@ -176,7 +149,7 @@ export default {
 					 this.tableData = res.data;
 					 this.totals = res.count;
 				  }else{this.loading = false;}
-				  console.log(res,'园区企业人事列表')
+				  console.log(res,'首页列表')
 				  this.loading = false;
 			}
 		})
@@ -195,12 +168,107 @@ export default {
 	  
   },
   mounted(){
-	  this.indexof(this.$router.options.routes[1].children,'企业人事列表');
-	  this.git_active();
+	  this.indexof(this.$router.options.routes[1].children,'首页');
+	  // this.git_active();
   }
 }
 </script>
 <style scoped="scoped">
+	*:hover{
+		cursor: pointer;
+	}
+	.inp_ch{
+		width:706px;
+		height:100%;
+		border:2px solid rgba(205,205,205,1);
+		border-right:none;
+		padding: 16px 27px;
+		float:left;
+	}
+	.inp_ch input{
+		width:590px;
+		height:100%;
+		float:left;
+		border: none;
+		outline:none;
+		font-size:30px;
+		
+	}
+	.inp{
+		width:857px;
+		height: 100%;
+		margin: 0 auto;
+	}
+	.inp button{
+		float:right;
+		border: none;
+		outline:none;
+		width:151px;
+		height:70px;
+		background:rgba(41,121,255,1);
+		border-radius:2px;
+		font-size:32px;
+		color: #FFFFFF;
+	}
+	.inp img{
+		float:left;
+		width: 36px;
+		height:36px;
+		margin-right:20px;
+	}
+	
+	.inp_chs{
+		width:539px;
+		height:100%;
+		border:2px solid rgba(205,205,205,1);
+		border-right:none;
+		padding: 7px 15px;
+		float:left;
+	}
+	.inp_chs input{
+		width:400px;
+		height:100%;
+		float:left;
+		border: none;
+		outline:none;
+		font-size:20px;
+		::-webkit-input-placeholder { /* WebKit browsers */
+			      color:#E6E6E6 }
+			  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+			      color: #E6E6E6 }
+			  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+			      color: #E6E6E6 }
+			  :-ms-input-placeholder { /* Internet Explorer 10+ */
+			      color: #E6E6E6}
+			  input:focus::-webkit-input-placeholder{ color:#E6E6E6;}
+	}
+	.inps{
+		width:640px;
+		height:40px;
+		margin: 0 auto;
+		margin-top:20px;
+	}
+	.inps button{
+		float:right;
+		border: none;
+		outline:none;
+		width:100px;
+		height:40px;
+		background:rgba(41,121,255,1);
+		border-radius:2px;
+		font-size:20px;
+		color: #FFFFFF;
+	}
+	.inps img{
+		float:left;
+		width: 24px;
+		height:24px;
+		margin-right:15px;
+	}
+	
+	
+	
+	
 	.lef{
 		margin-right:8px;
 		float:left;

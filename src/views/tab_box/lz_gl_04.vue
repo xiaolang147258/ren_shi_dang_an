@@ -75,6 +75,13 @@ export default {
 	  			  }
 	  		  }
 	  },
+	  isNull(){//判断文本输入框是否为纯空格或者空
+	  	return function( str ){if ( str == "" ) return true;
+	      var regu = "^[ ]+$";
+	      var re = new RegExp(regu);
+	      return re.test(str);//为空或纯空格为 true  有值为false
+	     }
+	  },
   },
   data(){
 	  return {
@@ -138,11 +145,20 @@ export default {
 	 			}
 	 		})
 	 },
+	 qin(){
+		this.value={
+			          staff_id:'',//员工ID
+					  company_id:'',//企业ID
+					  company_name:'',//企业名称全称
+					  turnover_reason:'',//离职原因	
+					  turnover_time:'',//离职时间
+		            } 
+	 },
 	 git_put(){//新增修改离职原因
 	       if(this.act_yuan){this.value.staff_id = this.value.id}
 	       if(this.value.staff_id){}else{this.$message({message:'请选择 离职员工',type:'warning'});return false};
 		   if(this.value.turnover_time){}else{this.$message({message:'请选择 离职时间',type:'warning'});return false};
-		   if(this.value.turnover_reason){}else{this.$message({message:'请填写 离职原因',type:'warning'});return false};
+		   if(this.isNull(this.value.turnover_reason)){this.$message({message:'请填写 离职原因',type:'warning'});return false}else{};
 		   this.value.company_id=localStorage.uid;
 		   this.value.company_name = localStorage.company;
 	       let urls =  this.act_yuan?'/pm/retire_staff/modify_retire_staff':'/pm/retire_staff/insert_retire_staff';
@@ -153,13 +169,7 @@ export default {
 		   			 this.$message({message:'操作成功',type:'success'})
 					 this.dialogVisible2 = false;
 					 this.git_active();
-					 this.value={
-			          staff_id:'',//员工ID
-					  company_id:'',//企业ID
-					  company_name:'',//企业名称全称
-					  turnover_reason:'',//离职原因	
-					  turnover_time:'',//离职时间
-		            }
+					 this.qin();
 		   		  }else{this.active = []}
 		   	}
 		   })
@@ -178,9 +188,8 @@ export default {
 	
 //离职处理
 		  git_fuchad2(i,num){//
-		      console.log(i);
 		  	  this.act_yuan = num;
-			  if(num){this.value = i;}
+			  if(num){this.value = i;console.log(this.value)}
 		      this.dialogVisible2=true;
 		  },
 		  handleClose(done){//监测用户点击x
@@ -188,13 +197,13 @@ export default {
 		               confirmButtonText:'确定',
 		               cancelButtonText:'取消',
 		               type: 'warning'
-		     }).then(() => {this.dialogVisible2 = false;}).catch(() => {});
+		     }).then(() => {this.dialogVisible2 = false;this.qin();this.git_acts()}).catch(() => {});
 		  },
   },
   mounted(){
 	  this.indexof(this.$router.options.routes[1].children,'离职管理');
 	  this.git_active();
-	  this.git_acts()
+	  this.git_acts();
   }
 }
 </script>

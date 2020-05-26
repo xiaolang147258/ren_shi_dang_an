@@ -142,7 +142,6 @@ export default {
 					poor_id:"",//脱贫属性ID
 					is_military:"",//是否服过兵役
 					time:"",//此条记录更新时间
-					
 					edu_list:[
 						{
 							         id:"",//教育经历ID

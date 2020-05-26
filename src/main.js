@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-
 // import axios from 'axios'
 // import Api from './config/api'
 
@@ -13,7 +12,6 @@ import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/tooltip'
 // Vue.use(ECharts);
 Vue.component('chart', ECharts)
-
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

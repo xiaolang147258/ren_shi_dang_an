@@ -18,38 +18,43 @@ const routes = [
     component: () => import('../views/home.vue'),
 	children:[
 		{
+		 label:'首页',
+		 path: '/home_tabel01',
+		 name: 'home_tabel01',
+		 component: () => import('../views/tab_box/home_tabel01.vue'),
+		},
+		{
 		 label:'用户管理',
 		 path: '/User_Management',
 		 name: 'User_Management',
 		 component: () => import('../views/tab_box/User_Management.vue'),
 		},
-		
 		{
-		 label:'园区企业人事概况',
+		 label:'企业人事概况',
 		 path: '/yqqyrs_gk_01',
 		 name: 'yqqyrs_gk_01',
 		 component: () => import('../views/tab_box/yqqyrs_gk_01.vue'),
 		},
 		
 		{
-		 label:'园区企业人事列表',
+		 label:'企业人事列表',
 		 path: '/yqqyrs_lb_02',
 		 name: 'yqqyrs_lb_02',
 		 component: () => import('../views/tab_box/yqqyrs_lb_02.vue'),
 		},
 
 		{
-		 label:'园区员工管理',
+		 label:'员工管理',
 		 path: '/yq_ql_yg_gl_03',
 		 name: 'yq_ql_yg_gl_03',
 		 component: () => import('../views/tab_box/yq_ql_yg_gl_03.vue'),
 		},
-		{
-		 label:'企业员工管理',
-		 path: '/yq_ql_yg_gl_03',
-		 name: 'yq_ql_yg_gl_03',
-		 component: () => import('../views/tab_box/yq_ql_yg_gl_03.vue'),
-		},
+		// {
+		//  label:'企业员工管理',
+		//  path: '/yq_ql_yg_gl_03',
+		//  name: 'yq_ql_yg_gl_03',
+		//  component: () => import('../views/tab_box/yq_ql_yg_gl_03.vue'),
+		// },
 		
 		{
 		 label:'离职管理',
